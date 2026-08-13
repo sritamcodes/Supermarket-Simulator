@@ -2,12 +2,15 @@ print("++++++++++++++++++++++++++++++++++++++++++++++++++++")
 print("++++++++++++++++++Supermarket ++++++++++++++++++++++")
 print("++++++++++++++++++++++++++++++++++++++++++++++++++++")
 def display():
+    if len(product)==0:
+        print("No products available.")
+        return
     print("====================================")
     for product_id, details in product.items():
         print(f"|Product ID: {product_id}")
         for key, value in details.items():
             print(f"|{key}:{value}")
-    print("====================================")
+        print("====================================")
 #==========================
 def search(product_name=None):
     for values in product.values():
@@ -17,22 +20,35 @@ def search(product_name=None):
             return False
 #==============================
 def add():
-    product_name=input("enter the product's name:")
-    product_category=input("Enter the category:")
-    product_price=float(input("Enter the price:"))
-    product_stocks=int(input("Enter the Stocks:"))
-    if search(product_name):
-        print("Product Exists")
+    try:
+        product_name = input("Enter the product's name: ")
+        product_category = input("Enter the category: ")
+        product_price = float(input("Enter the price: "))
+        product_stocks = int(input("Enter the Stocks: "))
+
+        # Check whether product already exists
+        if search(product_name):
+            print("Product Exists")
+            return
+
+        product_id = f"PRODUCT{len(product)+1:04}"
+
+        product[product_id] = {
+            "name": product_name,
+            "category": product_category,
+            "price": product_price,
+            "stocks": product_stocks
+        }
+
+    except ValueError:
+        print("Invalid input! Price must be a number and stocks must be an integer.")
+
+    except Exception as e:
+        print(f"Can't add product: {e}")
+
     else:
-        product_id=f"PRODUCT{len(product)+1:04}"
-        product[product_id]={
-            "name":product_name,
-            "category":product_category,
-            "price":product_price,
-            "stocks":product_stocks
-            }
-        print("Product Succesfully Added")
-#================================
+        print("Product Successfully Added")
+#==============================
 def update():
     print("Updating")
 def delete():
